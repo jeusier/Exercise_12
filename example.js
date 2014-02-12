@@ -1,5 +1,6 @@
 var http = require('http');
 var url = require('url');
+var qs = require('querystring');
 
 function Link(name, url) {
 	this.name = name;
@@ -23,6 +24,23 @@ function index(req, res){
 
 }
 
+function add(req, res){
+	res.writeHead(200, {'Content-Type': 'text/plain'});
+	if(req.method == 'POST'){
+		var body = '';
+		req.on('data',function(DATA){// on is an event listener
+			body += DATA;
+		});
+		req.on('end', function(){
+			var params = qs.parse(body);
+			console.log(params);
+			res.end('Added Link\n');
+		});
+	} else {
+		res.end('Invalid POST\n');
+	}
+}
+
 function show404(req, res){
 	res.writeHead(404, {'Content-Type': 'text/plain'});
 	res.end('Page Not Found! ><\n');
@@ -33,6 +51,9 @@ http.createServer(function (req, res) {
 	switch(url_parts.pathname){
 		case '/':
 			index(req, res);
+			break;
+		case '/add':
+			add(req, res);
 			break;
 		default: show404(req, res);
 	}
