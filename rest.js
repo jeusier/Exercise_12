@@ -25,15 +25,17 @@ function findAllLinks(req, res) {
 }
 
 function findLinkById(req, res, link_id) {
-	var id_link = "<a id='"+links[link_id].id+"' href='"+links[link_id].url+"'>"+links[link_id].name+"</a>\n";
-
+	for (var i = 0; i < links.length; i++){
+		if (links[i].id == link_id){
+			var id_link = "<a id='"+links[i].id+"' href='"+links[i].url+"'>"+links[i].name+"</a>\n";
+		}
+	}
 	res.writeHead(200, {'Content-Type': 'text/plain'});
 	res.end(id_link + '\n');
 
 }
 
 function createLink(req, res, link_id) {
-	console.log(links.indexOf(link_id));
 	var body = '';
 	req.on('data', function(DATA) { // on is an event listener
 		body += DATA;
@@ -59,20 +61,28 @@ function updateLink(req, res, link_id) {
 		//console.log(body);
 		var params = qs.parse(body);
 		//console.log(params);
-		var newLink = new Link(params.name, params.url);
+		//var newLink = new Link(params.name, params.url);
+		for (var i = 0; i < links.length; i++){
+			if (links[i].id == link_id){
+					links[i].id = link_id;
+					links[i].name = params.name;
+					links[i].url = params.url;
+			}
+		}
+
+
 		//console.log(newLink);
-		links.push(newLink);
 		console.log(links);
-		res.end('Added Link\n');
+		res.end('Updated Link\n');
 	});
 }
 
 function deleteLink(req, res, link_id) {
-	//console.log(links.indexOf(link_id));
-	//var linkToDelete = links.indexOf(link_id);
-	//console.log(links.indexOf(link_id));
-	//console.log(links);
-	links.splice(link_id, 1);
+	for (var i = 0; i < links.length; i++){
+		if (links[i].id == link_id){
+			links.splice(i, 1);
+		}
+	}
 	console.log(links);
 	res.writeHead(200, {'Content-Type': 'text/plain'});
 	res.end('Deleted Link\n');
