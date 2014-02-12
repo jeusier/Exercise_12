@@ -45,6 +45,7 @@ function findLinkById(req, res, link_id) {
 
 //create link and add to link array
 function createLink(req, res, link_id) {
+	res.writeHead(200, {'Content-Type': 'text/plain'});
 	var body = '';
 	//stores the data string into the body variable
 	req.on('data', function(DATA) { // on is an event listener
@@ -65,6 +66,7 @@ function createLink(req, res, link_id) {
 
 //update a link with an already used id
 function updateLink(req, res, link_id) {
+	res.writeHead(200, {'Content-Type': 'text/plain'});
 		var body = '';
 	//stores the data string into the body variable
 	req.on('data', function(DATA) { // on is an event listener
