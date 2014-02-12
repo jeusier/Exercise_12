@@ -7,11 +7,7 @@ function Link(name, url) {
 	this.url = url;
 }
 
-var links = [
-	new Link("Youtube", "youtube.com"),
-	new Link("Google", "google.com"),
-	new Link("Reddit", "reddit.com")
-	];
+var links = [];
 
 function index(req, res){
 	var temp = "";
