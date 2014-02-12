@@ -34,6 +34,7 @@ function add(req, res){
 		req.on('end', function(){
 			var params = qs.parse(body);
 			console.log(params);
+			links.push(params);
 			res.end('Added Link\n');
 		});
 	} else {
