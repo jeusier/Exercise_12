@@ -10,4 +10,8 @@ block content
 		li
 			a(href=link.url)= link.name 
 			= " "
-			a(href="/links/#{link.id}/edit") Edit
+			form(name="edit", action="/links/#{link.id}/edit")
+				input(type="submit", value="Edit")
+			form(name="delete", action="/links/#{link.id}", method="post")
+				input(type="hidden" name="_method" value="delete")
+				input(type="submit", value="Delete")

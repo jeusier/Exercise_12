@@ -106,7 +106,7 @@ app.delete('/links/:id', function(req, res){
 			//if link with specified id is found, remove from array
 			if (links[i].id == post_id){
 				links.splice(i, 1);
-				res.end('The link has been deleted\n');
+				res.redirect('/links');
 				return;
 			} else {
 				res.send("Link with specified ID does not exist\n");
