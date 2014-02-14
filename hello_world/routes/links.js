@@ -38,18 +38,12 @@ app.get('/links/:id/:edit', function(req, res){
 	}
 });
 
-// app.get('/links/:new', function(req, res){
-// 	var post_new = req.params.new;
-// 	// if (post_id == "new"){
-// 		res.render('new', {title: "Create Link"});
-// 	// }
-// });
 
 app.get('/links/:id', function(req, res){
 	var post_id = req.params.id;
 
 	if (post_id == "new"){
-		res.render('new', {title: "Create Link"});
+		res.render('new', {title: "Create Link", links: links});
 	} else {
 		if(links.length === 0) {
 		res.render("show", {title: "Display Link", links: "empty"});
@@ -60,7 +54,7 @@ app.get('/links/:id', function(req, res){
 						var name = links[i].name;
 						var url = links[i].url;
 						var id = links[i].id
-					res.render('show', {title: "Display Link", name: name, url: url});
+					res.render('show', {title: "Display Link", name: name, url: url, id: id});
 				}
 			}
 		}
@@ -68,46 +62,27 @@ app.get('/links/:id', function(req, res){
 });
 
 
-	// if (links.length !== 0){
-
-	// 	// console.log("post_id:"+post_id);
-	// 	var id_link = "";
-	// 	//loop through array to find the link with the specified id and store into variable as a string
-	// 	for (var i = 0; i < links.length; i++){
-	// 		if (links[i].id == post_id){
-	// 			id_link = "<a id='"+links[i].id+"' href='"+links[i].url+"'>"+links[i].name+"</a>\n";
-	// 			res.render('show', {link: id_link});
-	// 				return;
-	// 		} else {
-	// 			res.render('show', {link: "No link has that ID"});
-	// 			return;
-	// 		}
-	// 	}
-	// }
-	// res.send("No links are currently stored\n");
-	// return;
-
-
-
 app.post('/links', function(req, res){
 	var post_url = req.body.url;
 	var post_name = req.body.name;
+	var post_id = req.body.id;
+	console.log("post_id: "+post_id);
 	var post_link = new Link(post_name, post_url);
 	links.push(post_link);
 	//console.log("post test");
 	//res.send('Added Link\n');
-	res.redirect('/links');
+	res.render('show', {title: "Created Link", name: post_name, url: post_url, id: post_id});
 });
 
 
 
 app.put('/links/:id', function(req, res){
-	console.log("test");
 	if (links.length !== 0){
 		var post_url = req.body.url;
 		var post_name = req.body.name;
 		var post_id = req.params.id;
 		var id = req.body.id;
+			console.log("test");
 		for (var i = 0; i < links.length; i++){
 				//if link with specified id is found, replace current values 
 			if (links[i].id == post_id){
@@ -115,7 +90,7 @@ app.put('/links/:id', function(req, res){
 				links[i].id = post_id;
 				links[i].name = post_name;
 				links[i].url = post_url;
-				res.send('Updated Link\n');
+				res.render('show', {title: "Updated Link", name: post_name, url: post_url, id: post_id});
 				return;
 			}
 		}

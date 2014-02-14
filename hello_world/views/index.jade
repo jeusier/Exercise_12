@@ -2,9 +2,12 @@ extends layout
 
 block content
 	h1= title
-	p Welcome to #{title}
-	p Current links are: 
+	p Create a new link: 
+		a(href="/links/new") New Link
+	p The current links are: 
 	ul
 	- for link in links
 		li
-			a(href=link.url)= link.name
+			a(href=link.url)= link.name 
+			= " "
+			a(href="/links/#{link.id}/edit") Edit

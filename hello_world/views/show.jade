@@ -2,8 +2,11 @@ extends layout
 
 block content
 	h1= title
-	p Welcome to #{title}
-	p The current link is: 
+	p View all links: 
+		a(href="/links") View all links
+	p The link you have created/modified is: 
 	ul
 		li
 			a(href=url)= name
+			= " "
+			a(href="/links/#{id}/edit") Edit

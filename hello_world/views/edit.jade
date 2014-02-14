@@ -4,8 +4,9 @@ html(lang="en")
 	body
 		h1 Update a link
 	div
-		form(name="links", action="/links/show", method="put")
+		form(name="links", action="/links/#{id}", method="post")
+			input(type="hidden" name="_method" value="put")
 			input(type="text", name="name" value="#{name}")
 			input(type="text", name="url" value="#{url}")
-			input(type="text", name="id" value="#{id}")
+			input(type="hidden", name="id" value="#{id}")
 			input(type="submit", value="Update Link")
