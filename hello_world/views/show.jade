@@ -1,6 +1,9 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
-  p The link you have searched for is: #{link}
+	h1= title
+	p Welcome to #{title}
+	p The current link is: 
+	ul
+		li
+			a(href=url)= name

@@ -14,20 +14,19 @@ function Link(name, url) {
 	this.id = links.length;
 }
 
-app.get('/links', function(req, res){
-	if (links.length !== 0){
-		var all = "";
-		//loop through the array and store into a temporary string
-		for (var i = 0; i < links.length; i++){
-			all += "<a id='"+links[i].id+"' href='"+links[i].url+"'>"+links[i].name+"</a>\n";
-		}
-		res.render('index', { title: 'Find Links', link: all});
-		//res.send(all + '\n');
+// get findAllLinks
+app.get("/links", function(req, res) {
+	var allLinks = "";
+	if(links.length === 0) {
+		res.render("index", {title: "Display all Links", links: "empty"});
 		return;
+		} else {
+		for (var i = 0; i < links.length; i++) {
+		res.render("index", {title: "Display all Links", links: links});
+		}
 	}
-	//res.send("No links are currently stored\n");
-	res.render('index', { title: 'Find Links', link: "empty"});
-});
+}); // ends findAllLinks
+
 
 app.get('/links/:id/:edit', function(req, res){
 	var post_id = req.params.id;
@@ -39,39 +38,55 @@ app.get('/links/:id/:edit', function(req, res){
 	}
 });
 
-app.get('/links/:new', function(req, res){
-	var post_new = req.params.new;
-	// if (post_id == "new"){
-		res.render('new', {title: "Create Link"});
-	// }
-});
+// app.get('/links/:new', function(req, res){
+// 	var post_new = req.params.new;
+// 	// if (post_id == "new"){
+// 		res.render('new', {title: "Create Link"});
+// 	// }
+// });
 
 app.get('/links/:id', function(req, res){
 	var post_id = req.params.id;
-	// var split_id = post_id.split("/");
-	// console.log(split_id);
-	// if (post_id == "new"){
-	//	res.render('new', {title: "Create Link"});
-	// }
-	if (links.length !== 0){
 
-		// console.log("post_id:"+post_id);
-		var id_link = "";
-		//loop through array to find the link with the specified id and store into variable as a string
-		for (var i = 0; i < links.length; i++){
-			if (links[i].id == post_id){
-				id_link = "<a id='"+links[i].id+"' href='"+links[i].url+"'>"+links[i].name+"</a>\n";
-				res.render('show', {link: id_link});
-					return;
-			} else {
-				res.render('show', {link: "No link has that ID"});
-				return;
+	if (post_id == "new"){
+		res.render('new', {title: "Create Link"});
+	} else {
+		if(links.length === 0) {
+		res.render("show", {title: "Display Link", links: "empty"});
+		return;
+		} else {
+			for (var i = 0; i < links.length; i++){
+				if (links[i].id == post_id){
+						var name = links[i].name;
+						var url = links[i].url;
+						var id = links[i].id
+					res.render('show', {title: "Display Link", name: name, url: url});
+				}
 			}
 		}
 	}
-	res.send("No links are currently stored\n");
-	return;
 });
+
+
+	// if (links.length !== 0){
+
+	// 	// console.log("post_id:"+post_id);
+	// 	var id_link = "";
+	// 	//loop through array to find the link with the specified id and store into variable as a string
+	// 	for (var i = 0; i < links.length; i++){
+	// 		if (links[i].id == post_id){
+	// 			id_link = "<a id='"+links[i].id+"' href='"+links[i].url+"'>"+links[i].name+"</a>\n";
+	// 			res.render('show', {link: id_link});
+	// 				return;
+	// 		} else {
+	// 			res.render('show', {link: "No link has that ID"});
+	// 			return;
+	// 		}
+	// 	}
+	// }
+	// res.send("No links are currently stored\n");
+	// return;
+
 
 
 app.post('/links', function(req, res){
