@@ -1,0 +1,10 @@
+html(lang="en")
+	head
+		title= title
+	body
+		h1 Create a new Link
+	div
+		form(name="links", action="/links", method="post")
+			input(type="text", name="name")
+			input(type="text", name="url")
+			input(type="submit", value="Create Link")

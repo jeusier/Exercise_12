@@ -1,0 +1,11 @@
+html(lang="en")
+	head
+		title= title
+	body
+		h1 Update a link
+	div
+		form(name="links", action="/links", method="put")
+			input(type="text", name="name" value="#{name}")
+			input(type="text", name="url" value="#{url}")
+			input(type="text", name="id" value="#{id}")
+			input(type="submit", value="Update Link")
