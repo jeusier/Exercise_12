@@ -1,11 +1,11 @@
-html(lang="en")
-	head
-		title= title
-	body
-		h1 Create a new Link
+extends layout
+block content
+	h1 Create a new Link
 	div
-		form(name="links", action="/links", method="post")
-			input(type="text", name="name" value="Enter Name")
-			input(type="text", name="url" value="Enter URL")
-			input(type="hidden", name="id" value=links.length)
-			input(type="submit", value="Create Link")
+		#content
+			form(id="create", action="/links" method="POST")
+				input(type="text", id="name" name="name" value="Enter Name")
+				input(type="text", id="url" name="url" value="Enter URL")
+				input(type="hidden", id="id" name="id" value=links.length)
+				input(type="submit", value="Create Link")
+			#result

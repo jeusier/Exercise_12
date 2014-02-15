@@ -70,8 +70,9 @@ app.post('/links', function(req, res){
 	var post_link = new Link(post_name, post_url);
 	links.push(post_link);
 	//console.log("post test");
-	//res.send('Added Link\n');
-	res.render('show', {title: "Created Link", name: post_name, url: post_url, id: post_id});
+	res.send("<a href='"+post_link.url+"' id='"+post_link.id+"'>"+post_link.name+"</a>");
+	return;
+	//res.render('show', {title: "Created Link", name: post_name, url: post_url, id: post_id});
 });
 
 
