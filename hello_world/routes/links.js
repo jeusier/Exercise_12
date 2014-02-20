@@ -1,119 +1,127 @@
 
 var express = require('express');
 var app = module.exports = express();
+var mongoose = require('mongoose');
+
+var linkSchema = new mongoose.Schema({
+	name: String,
+	url: String,
+	id: Number	
+}); // ends link
+
+var links = mongoose.model('links', linkSchema);
+
+mongoose.connect('mongodb://localhost/jasontest');
 
 
+//find all links
+app.get('/links', function(req, res) {
 
-//array to hold all Link instances
-var links = [];
-  
-//Link class for links
-function Link(name, url) {
-	this.name = name;
-	this.url = url;
-	this.id = links.length;
-}
-
-// get findAllLinks
-app.get("/links", function(req, res) {
-	var allLinks = "";
-	if(links.length === 0) {
-		res.render("index", {title: "Display all Links", links: "empty"});
-		return;
-		} else {
-		for (var i = 0; i < links.length; i++) {
-		res.render("index", {title: "Display all Links", links: links});
+	//find all documents in mongodb
+	links.find(function(err, link) {
+		if (err) {
+			console.log("error: find all links");
 		}
-	}
-}); // ends findAllLinks
+		//list all links into index
+		res.render("index", {links: link});
+
+	}); //end links.find
+
+}); //end of display all links
 
 
-app.get('/links/:id/:edit', function(req, res){
-	var post_id = req.params.id;
-	var post_edit = req.params.edit;
-	console.log("id: "+post_id);
-	console.log("edit: "+post_edit);
-	if (post_edit == "edit"){
-		res.render('edit', {name: links[post_id].name, url: links[post_id].url, id: post_id});
-	}
-});
-
-
-app.get('/links/:id', function(req, res){
-	var post_id = req.params.id;
-
-	if (post_id == "new"){
-		res.render('new', {title: "Create Link", links: links});
+//find link by id
+app.get('/links/:id', function(req, res) {
+	var find_id = req.params.id;
+	if (find_id == "new") {
+		//display form
+		res.render('new', {title: "Create Link"})
 	} else {
-		if(links.length === 0) {
-		res.render("show", {title: "Display Link", links: "empty"});
-		return;
-		} else {
-			for (var i = 0; i < links.length; i++){
-				if (links[i].id == post_id){
-						var name = links[i].name;
-						var url = links[i].url;
-						var id = links[i].id
-					res.render('show', {title: "Display Link", name: name, url: url, id: id});
-				}
+
+		//find document base on id in mongodb
+		links.findOne({_id: find_id}, function(err, link) {
+			if (err) {
+				console.log("error: display link by id");
 			}
-		}
+			//display link into show
+			res.render("show", {link: link});
+
+		});  //end links.findOne
 	}
-});
+}) //end of display link by id
 
 
-app.post('/links', function(req, res){
-	var post_url = req.body.url;
-	var post_name = req.body.name;
-	var post_id = req.body.id;
-	console.log("post_id: "+post_id);
-	var post_link = new Link(post_name, post_url);
-	links.push(post_link);
-	//console.log("post test");
-	res.send("<a href='"+post_link.url+"' id='"+post_link.id+"'>"+post_link.name+"</a>");
+//new link form
+app.get('/links/new', function(req, res) {
+
+	var find_new = req.params.new;
+	if (find_new == "new") {
+		//display form
+		res.render('new', {title: "Create Link"})
+	}
+}); //end new link form
+
+
+//create new link
+app.post('/links', function(req, res) {
+
+	var new_name = req.body.name;
+	var new_url = req.body.url;
+	//store new link into model
+	var new_link = new links({ name: new_name, url: new_url });
+	//save new link into mongodb
+	new_link.save(function(err) {
+		if (err)
+			console.log("error");
+
+	}); //end new_link.save
+	//display new link after creating
+	res.send("<a href='"+new_link.url+"' id='"+new_link.id+"'>"+new_link.name+"</a>");
 	return;
-	//res.render('show', {title: "Created Link", name: post_name, url: post_url, id: post_id});
-});
+
+}); //end create new link
 
 
+//update link
+app.put('/links/:id', function(req, res) {
 
-app.put('/links/:id', function(req, res){
-	if (links.length !== 0){
-		var post_url = req.body.url;
-		var post_name = req.body.name;
-		var post_id = req.params.id;
-		var id = req.body.id;
-			console.log("test");
-		for (var i = 0; i < links.length; i++){
-				//if link with specified id is found, replace current values 
-			if (links[i].id == post_id){
-				console.log("post_id: "+post_id);
-				links[i].id = post_id;
-				links[i].name = post_name;
-				links[i].url = post_url;
-				res.render('show', {title: "Updated Link", name: post_name, url: post_url, id: post_id});
-				return;
-			}
+	var find_id = req.params.id;
+	var find_name = req.body.name;
+	var find_url = req.body.url;
+
+	//find link by id
+	links.findOne({_id: find_id}, function(err, link) {
+		//store new values from input
+		link.name = find_name;
+		link.url = find_url;
+
+		if(err) {
+			console.log("error: update link by id");
 		}
-	}
-	res.send("No links were found for the ID\n");
-});
 
-app.delete('/links/:id', function(req, res){
-	if (links.length !== 0){
-		//loop through links array to find the link with the specified id
-		var post_id = req.params.id;
-		for (var i = 0; i < links.length; i++){
-			//if link with specified id is found, remove from array
-			if (links[i].id == post_id){
-				links.splice(i, 1);
-				res.redirect('/links');
-				return;
-			} else {
-				res.send("Link with specified ID does not exist\n");
-				return;
-			}
-		}
-	}
-	res.send("No links are currently stored\n");
-});
+		//update document with new values
+		link.save(function(err) {
+			if(err)
+				console.log("error: saving update");
+		});
+		//go back to links page
+		res.redirect("..");
+		return;
+
+	}); //end of links.findOne
+
+}); //end of update link
+
+
+//delete link
+app.delete('/links/:id', function(req, res) {
+
+	var find_id= req.param('id');
+
+	//find link by id and remove
+	links.find({_id: find_id}).remove().exec();
+
+	//go back to index page
+	res.redirect("..");
+
+}); //end of delete links

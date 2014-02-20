@@ -1,7 +1,7 @@
 extends layout
 
 block content
-	h1= title
+	h1 ALL LINKS!!!
 	p Create a new link: 
 		a(href="/links/new") New Link
 	p The current links are: 
@@ -10,8 +10,4 @@ block content
 		li
 			a(href=link.url)= link.name 
 			= " "
-			form(name="edit", action="/links/#{link.id}/edit")
-				input(type="submit", value="Edit")
-			form(name="delete", action="/links/#{link.id}", method="post")
-				input(type="hidden" name="_method" value="delete")
-				input(type="submit", value="Delete")
+			a(href='/links/#{link._id}') Edit

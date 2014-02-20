@@ -1,11 +1,12 @@
 extends layout
 block content
 	h1 Create a new Link
+	p View all links: 
+		a(href="/links") All Links
 	div
 		#content
 			form(id="create", action="/links" method="POST")
 				input(type="text", id="name" name="name" value="Enter Name")
 				input(type="text", id="url" name="url" value="Enter URL")
-				input(type="hidden", id="id" name="id" value=links.length)
 				input(type="submit", value="Create Link")
 			#result

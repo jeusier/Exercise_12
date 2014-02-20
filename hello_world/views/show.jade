@@ -1,13 +1,17 @@
 extends layout
 
 block content
-	h1= title
-	p View all links: 
-		a(href="/links") View all links
-	p The link you have created/modified is: 
-	ul
-		li
-			a(href=url)= name
-			= " "
-			form(name="edit", action="/links/#{id}/edit")
-				input(type="submit", value="Edit")
+	h1 Update/Delete Links
+	div
+		#content
+			form(id='update', action='/links/#{link._id}', method='post') 
+				input(type='hidden', name='_method', value="put")
+				input(type='text', id='name', name='name', value='#{link.name}')
+				input(type='text', id='url', name='url', value='#{link.url}')
+				input(type='submit', value='Update Link')
+			#updateResult
+			form(id='delete', action='/links/#{link._id}', method='post') 
+				input(type='hidden', name='_method', value="delete")
+				input(type='submit', value='Delete Link')
+			#deleteResult
+

@@ -10,7 +10,6 @@ var http = require('http');
 var path = require('path');
 var links = require('./routes/links');
 
-
 var app = express();
 
 // all environments
@@ -30,6 +29,7 @@ app.use(links);
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
+
 
 app.get('/', routes.index);
 app.get('/users', user.list);

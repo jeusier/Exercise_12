@@ -1,11 +1,14 @@
 $(document).ready(function(){
-console.log("test1");
-	$('form').on('submit', function(event) {
+
+	//listener to create new link
+	$('#create').on('submit', function(event) {
+		//prevents from pre-refreshing
+		console.log("test");
 		event.preventDefault();
-		console.log("before ajax");
+		//perform ajax request
 		$.ajax('/links', {
 			type: 'POST',
-			data: $('form').serialize(),
+			data: $('#create').serialize(),
 			success: function(result) {
 				console.log("in your ajax");
 				$('#result').html(result).fadeIn();
@@ -14,9 +17,19 @@ console.log("test1");
 
 	});
 
+	// $('#update').on('submit', function(event) {
+	// 	event.preventDefault(); 
+	// 	console.log("test");
+	// 	$.ajax('/links/#{link._id}', {
+	// 		type: 'PUT',
+	// 		data: $('#update').serialize(),
+	// 		success: function(result) {
+	// 			console.log("in your ajax");
+	// 			$("#update").remove();
+	// 			$("#updateResult").html(result).fadeIn();
+	// 		}
+	// 	});
+	// });
 
-	// $.post("/new",{name: name, url: url, id: links.length}, function(results){
-	// 	$("#result").html(result);
-	// };
 
 });
